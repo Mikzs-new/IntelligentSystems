@@ -14,7 +14,7 @@ class RuleBasedSystem:
                 if isinstance(ante, list):
                     condition_set = True
                     for condition in ante:
-                        if isinstance(condition, list):
+                        if isinstance(condition, list) or "NOT" in ante or "OR" in ante:
                             if "NOT" in condition:
                                 for cond_not in condition:
                                     if cond_not in self.facts:
@@ -25,6 +25,7 @@ class RuleBasedSystem:
                                     if cond in self.facts:
                                         condition_set = True
                                         break
+                            break
                         elif not condition in self.facts:
                             condition_set = False
                 else:
@@ -50,12 +51,16 @@ if __name__ == "__main__":
     system.add_rule(["is_ungulate", "has_based_stripes"], "is_zebra")
     system.add_rule("is_bird", "is_animal")
     system.add_rule("is_mammal", "is_animal")
+    system.add_rule(["has_wings", "OR", "can_fly"], "is_bird")
+    system.add_rule(["NOT", "has_scales"], "is_flightless_bird")
 
-    system.add_fact("has_fur")
-    system.add_fact("eats_meat")
-    system.add_fact("has_tawny_color")
-#    system.add_fact("has_dark_spots")
-    system.add_fact("has_orange_color")
+    # system.add_fact("has_fur")
+    # system.add_fact("eats_meat")
+    # system.add_fact("has_tawny_color")
+    # system.add_fact("has_dark_spots")
+    # system.add_fact("has_orange_color")
 
+    system.add_fact("has_feather")
+    system.add_fact("has_wings")
 
     system.forward_chain()
